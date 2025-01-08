@@ -1,0 +1,101 @@
+RHCSA Exam
+
+January 30th 2024
+Lesson3
+***********
+3.1 ) Boot, reboot, and shutdown a system safely
+***********
+    systemctl reboot
+    sudo systemctl reboot
+    sudo systemctl reboot - - force
+    sudo systemctl power off
+    sudo systemctl poweroff - - force
+
+—force is not working use below commands
+    sudo systemctl reboot - - force - - force
+    sudo systemctl poweroff - - force - - force
+
+shutdown at 2.00
+sudo shutdown 02:00 (24 hours)
+
+Shutdown after 15 minutes
+sudo shutdown +15
+
+schedule a reboot
+sudo shutdown -r +15
+Sudo shutdown -r +1 ’Schedule restart to do an offline backup of our database'	
+
+***********
+3.2 ) Boot or change system into different operating modes
+***********
+
+systemctl get-default
+systemctl set-default multi-user.target
+*******To change the default operatiing system for a hour(graphical UI)
+
+sudo systemctl isolate graphical.target
+sudo systemctl isolate emergency.target
+Sudo systemctl isolate rescue.target
+
+
+*********
+3.3 ) Interrupt the boot process in order to gain access to a system
+ 
+We are assuming the root password is lost , then we are trying this
+
+
+**************
+Change the root password when we have physcia; access and the normal behavior(rhel 9 it is different)
+
+
+reboot the system
+press e to edit
+then go to the line linux and press ctrl+e to go to the end and press rd.break
+
+
+then press ctrl+x and then it will switch to the emergency mode 
+
+
+mount | grep /sysroot
+
+
+Mount -o remount rw /sysroot - to change the permissions of sysroot file in mount
+cd /sysroot
+Chroot /sysroot
+Sh#
+Passwd root
+then enter the new password
+
+after that create a new file named .autorelabel
+Touch /.autorelabel
+
+exit
+Reboot
+
+then you can login with the new password
+
+
+
+
+**************
+Change the root password according to the RHEL 9 documentation
+
+
+reboot the system 
+Press e to edit
+Then go the linux line and there we can see ro permission set default before the word crash, there you need to change ro -> rw 
+and press ctrl e to go the end of the line and press init = /bin/bash
+then press ctrl x
+
+you’ll prompt a bash shell for the root and change the password as normally
+passwd
+new pasword
+
+and then 
+create the /.autorelabel file in there 
+touch /.autorelabel
+
+after that 
+press exec /sbin/init
+
+
